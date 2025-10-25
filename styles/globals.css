@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
+body {
+  margin: 0;
+  font-family: 'Nunito Sans', Arial, sans-serif;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+* { box-sizing: border-box; }
+
+h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; }
