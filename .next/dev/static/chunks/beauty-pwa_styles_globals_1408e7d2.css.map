@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Thinkpad/OneDrive/Desktop/beauty-pwa/styles/globals.css"],"sourcesContent":["@tailwind base;\r\n@tailwind components;\r\n@tailwind utilities;\r\n\r\n/* Custom global styles */\r\nbody {\r\n  margin: 0;\r\n  font-family: 'Nunito Sans', Arial, sans-serif;\r\n  background-color: #ffffff;\r\n  color: #333333;\r\n}\r\n\r\n* { box-sizing: border-box; }\r\n\r\nh1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; }"],"names":[],"mappings":"AAAA;;AACA;;AACA;;AAGA;;;;;;;AAOA;;;;AAEA","debugId":null}}]
-}
