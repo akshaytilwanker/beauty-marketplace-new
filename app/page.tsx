@@ -1,119 +1,136 @@
-import { supabase } from '@/lib/supabaseClient'
+import Link from 'next/link';
 
-// Fetch services from our backend API
-async function getServices() {
-  try {
-    const response = await fetch('http://localhost:5000/api/services', {
-      cache: 'no-store'
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch services');
+export default function Home() {
+  const services = [
+    {
+      id: 1,
+      name: "Hair Services",
+      description: "Professional hair styling and treatments",
+      icon: "💇‍♀️",
+      color: "bg-rose-50 border-rose-200"
+    },
+    {
+      id: 2,
+      name: "Makeup",
+      description: "Makeup artists for all occasions", 
+      icon: "💄",
+      color: "bg-purple-50 border-purple-200"
+    },
+    {
+      id: 3, 
+      name: "Nail Care",
+      description: "Manicures, pedicures & nail art",
+      icon: "💅",
+      color: "bg-rose-50 border-rose-200"
     }
-    
-    const data = await response.json();
-    return data.services || [];
-  } catch (error) {
-    console.error('Error fetching services:', error);
-    return [];
-  }
-}
-
-export default async function Home() {
-  // Test Supabase connection
-  let connectionStatus = 'Testing...'
-  try {
-    const { data, error } = await supabase.from('profiles').select('*').limit(1)
-    if (error) {
-      connectionStatus = `❌ Error: ${error.message}`
-    } else {
-      connectionStatus = '✅ Supabase connected successfully!'
-    }
-  } catch (error) {
-    connectionStatus = `❌ Connection failed: ${error}`
-  }
-
-  // Fetch real services from backend
-  const services = await getServices();
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Beauty Marketplace
-        </h1>
-        
-        {/* Connection Status */}
-        <div className="bg-white rounded-lg p-6 shadow-md mb-6">
-          <h2 className="text-xl font-semibold mb-2">Database Status</h2>
-          <p className={connectionStatus.includes('✅') ? 'text-green-500' : 'text-red-500'}>
-            {connectionStatus}
-          </p>
-          <p className="text-blue-500 mt-2">
-            Backend API: {services.length > 0 ? '✅ Connected' : '❌ Not connected'}
-          </p>
-        </div>
-
-        {/* Real Services from Backend */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Available Services ({services.length})
-          </h2>
-          
-          {services.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service: any) => (
-                <div key={service.id} className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-                  <h3 className="text-lg font-semibold mb-2 text-gray-900">
-                    {service.name}
-                  </h3>
-                  <p className="text-gray-600 mb-3">{service.description}</p>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm bg-pink-100 text-pink-800 px-2 py-1 rounded">
-                      {service.category}
-                    </span>
-                    <span className="text-lg font-bold text-purple-600">
-                      ₹{service.price}
-                    </span>
-                  </div>
-                  
-                  <div className="mt-3 text-sm text-gray-500">
-                    Duration: {service.duration} mins
-                  </div>
-                </div>
-              ))}
+    <div className="min-h-screen bg-soft-white">
+      {/* Navigation */}
+      <nav className="bg-white shadow-sm border-b border-light-grey">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-heading font-bold text-rose-500">
+                BeautyConnect
+              </h1>
             </div>
-          ) : (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-              <p className="text-yellow-800">
-                No services found. Make sure your backend server is running on port 5000.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Category Overview */}
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Service Categories</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <h3 className="text-lg font-semibold mb-2">💇 Hair Services</h3>
-              <p className="text-gray-600">Professional hair styling and treatments</p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <h3 className="text-lg font-semibold mb-2">💄 Makeup</h3>
-              <p className="text-gray-600">Makeup artists for all occasions</p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <h3 className="text-lg font-semibold mb-2">💅 Nail Care</h3>
-              <p className="text-gray-600">Manicures, pedicures & nail art</p>
+            <div className="flex items-center space-x-4">
+              <Link 
+                href="/login" 
+                className="text-dark-text hover:text-rose-500 font-body font-medium"
+              >
+                Login
+              </Link>
+              <Link 
+                href="/register" 
+                className="bg-rose-500 text-white px-4 py-2 rounded-lg font-body font-medium hover:bg-rose-600 transition-colors"
+              >
+                Sign Up
+              </Link>
             </div>
           </div>
         </div>
-      </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-rose-500 to-purple-500 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl font-heading font-bold mb-6">
+            Discover Your Beauty
+          </h1>
+          <p className="text-xl font-body mb-8 opacity-90">
+            Book professional beauty services from trusted experts
+          </p>
+          
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-lg shadow-lg p-2 flex">
+              <input 
+                type="text" 
+                placeholder="Search for services, salons, or locations..."
+                className="flex-1 px-4 py-3 text-dark-text font-body focus:outline-none rounded-l-lg"
+              />
+              <button className="bg-rose-500 text-white px-6 py-3 rounded-lg font-body font-medium hover:bg-rose-600 transition-colors">
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-heading font-bold text-dark-text mb-4">
+              Popular Services
+            </h2>
+            <p className="text-dark-grey font-body text-lg">
+              Choose from our wide range of professional beauty services
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {services.map((service) => (
+              <div 
+                key={service.id}
+                className={`${service.color} border-2 rounded-xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer`}
+              >
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-xl font-heading font-semibold text-dark-text mb-2">
+                  {service.name}
+                </h3>
+                <p className="text-dark-grey font-body">
+                  {service.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Database Status */}
+      <section className="py-12 bg-light-grey">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center bg-white rounded-lg px-6 py-3 shadow-sm">
+            <div className="w-3 h-3 bg-success rounded-full mr-3"></div>
+            <span className="font-body text-dark-text font-medium">
+              ✅ Supabase connected successfully!
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-light-grey py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-dark-grey font-body">
+            © 2024 BeautyConnect. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
-  )
+  );
 }
