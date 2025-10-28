@@ -1,10 +1,29 @@
 @tailwind base;
-@tailwind components; 
+@tailwind components;
 @tailwind utilities;
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Beauty Marketplace Colors */
+  --rose-pink: #ff6b9d;
+  --rose-pink-light: #ff8ab0;
+  --rose-pink-dark: #ff4d7d;
+  --soft-white: #fff9fb;
+  --light-grey: #f8f9fa;
+  --medium-grey: #e9ecef;
+  --dark-grey: #6c757d;
+  --dark-text: #2d3748;
+  --darker-text: #1a202c;
+  --accent-purple: #9c89ff;
+  --accent-purple-light: #b5a8ff;
+  --accent-gold: #ffd166;
+  --accent-teal: #06d6a0;
+  --success: #06d6a0;
+  --warning: #ffd166;
+  --error: #ef476f;
+  --info: #118ab2;
 }
 
 @theme inline {
