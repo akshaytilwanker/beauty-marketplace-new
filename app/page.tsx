@@ -44,7 +44,7 @@ export default function Home() {
                 Login
               </Link>
               <Link 
-                href="/register" 
+                href="/signup" 
                 className="bg-rose-500 text-white px-4 py-2 rounded-lg font-body font-medium hover:bg-rose-600 transition-colors"
               >
                 Sign Up
@@ -75,6 +75,32 @@ export default function Home() {
               <button className="bg-rose-500 text-white px-6 py-3 rounded-lg font-body font-medium hover:bg-rose-600 transition-colors">
                 Search
               </button>
+            </div>
+          </div>
+
+          {/* Provider CTA Section */}
+          <div className="mt-12 text-center">
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 max-w-2xl mx-auto">
+              <h2 className="text-2xl font-heading font-bold text-white mb-4">
+                Are you a beauty professional?
+              </h2>
+              <p className="text-white/90 font-body text-lg mb-6">
+                Join thousands of providers growing their business with BeautyConnect
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link 
+                  href="/signup?role=provider"
+                  className="bg-white text-rose-500 px-8 py-4 rounded-lg font-body font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg"
+                >
+                  List Your Services ›
+                </Link>
+                <Link 
+                  href="/provider-benefits"
+                  className="border-2 border-white text-white px-8 py-4 rounded-lg font-body font-medium hover:bg-white/10 transition-colors"
+                >
+                  Learn More
+                </Link>
+              </div>
             </div>
           </div>
         </div>
