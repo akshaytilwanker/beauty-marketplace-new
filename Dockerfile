@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+# Cache busting
+RUN echo "FORCE CACHE BUST: 2024-10-30-$(date +%H%M%S)"
+
 WORKDIR /app
 
 # Copy package files

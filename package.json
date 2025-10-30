@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-     "prebuild": "echo 'Build starting at $(date)'",
+    "prebuild": "echo 'FORCE CACHE BUST - $(date +%Y%m%d%H%M%S)'",
     "start": "next start",
     "lint": "eslint"
-  },
+  }
+}
   "dependencies": {
     "@next/font": "14.0.0",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
