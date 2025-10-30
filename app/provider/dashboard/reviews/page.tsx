@@ -1,5 +1,9 @@
 'use client';
 
+// Force dynamic rendering - no static generation at build time
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import { useState, useEffect } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
@@ -34,7 +38,7 @@ export default function ReviewsPage() {
     pendingApproval: 0
   });
   
-  // ✅ Correct: Supabase client inside component
+  // Initialize Supabase client only on client side
   const supabase = createClientComponentClient();
 
   useEffect(() => {
@@ -44,7 +48,10 @@ export default function ReviewsPage() {
   const fetchReviews = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase
         .from('reviews')
@@ -90,6 +97,7 @@ export default function ReviewsPage() {
 
       if (error) throw error;
       
+      // Refresh data
       fetchReviews();
     } catch (error) {
       console.error('Error updating review:', error);
@@ -107,6 +115,7 @@ export default function ReviewsPage() {
 
       if (error) throw error;
       
+      // Refresh data
       fetchReviews();
     } catch (error) {
       console.error('Error deleting review:', error);
