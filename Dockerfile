@@ -1,7 +1,7 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
-# Cache busting
-RUN echo "FORCE CACHE BUST: 2024-10-30-$(date +%H%M%S)"
+# Complete cache busting
+RUN echo "NUCLEAR CACHE BUST: Node20-$(date +%s)"
 
 WORKDIR /app
 
@@ -11,6 +11,9 @@ RUN npm ci
 
 # Copy source code
 COPY . .
+
+# Delete any cached .next folder
+RUN rm -rf .next
 
 # Build the application
 RUN npm run build
