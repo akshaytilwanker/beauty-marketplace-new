@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   try {
     console.log('Registration API called');
     
-    // Initialize Supabase client inside the function (runtime)
+    // Initialize Supabase client
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
@@ -19,13 +19,13 @@ export async function POST(request: Request) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Parse request body
-    const { email, password, name, userType } = await request.json();
+    // ✅ Correct field names from frontend
+    const { email, password, full_name, phone, role } = await request.json();
     
-    console.log('Registering user:', { email, name, userType });
+    console.log('Registering user:', { email, full_name, role, phone });
 
     // Validate required fields
-    if (!email || !password || !name || !userType) {
+    if (!email || !password || !full_name || !role) {
       return NextResponse.json(
         { error: 'All fields are required' }, 
         { status: 400 }
@@ -57,16 +57,17 @@ export async function POST(request: Request) {
 
     console.log('Auth user created:', authData.user.id);
 
-    // 2. Create user profile in profiles table
+    // 2. Create user profile in users table
     console.log('Creating user profile...');
     const { error: profileError } = await supabase
-      .from('profiles')
+      .from('users') // ✅ Correct table name
       .insert([
         {
-          id: authData.user.id,
+          auth_id: authData.user.id, // ✅ Correct field name
           email: email.trim().toLowerCase(),
-          full_name: name,
-          user_type: userType,
+          full_name: full_name, // ✅ Correct field name
+          phone: phone || '',
+          role: role, // ✅ Correct field name
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
@@ -74,10 +75,6 @@ export async function POST(request: Request) {
 
     if (profileError) {
       console.error('Profile creation error:', profileError);
-      
-      // Try to clean up the auth user if profile creation fails
-      await supabase.auth.admin.deleteUser(authData.user.id);
-      
       return NextResponse.json(
         { error: 'Profile creation failed: ' + profileError.message }, 
         { status: 400 }
@@ -86,15 +83,14 @@ export async function POST(request: Request) {
 
     console.log('User profile created successfully');
 
-    // Return success response
     return NextResponse.json({ 
       success: true,
       message: 'User registered successfully', 
       user: { 
         id: authData.user.id, 
         email: authData.user.email,
-        name: name,
-        userType: userType
+        full_name: full_name,
+        role: role
       } 
     }, { status: 201 });
 
@@ -107,7 +103,6 @@ export async function POST(request: Request) {
   }
 }
 
-// Optional: Add GET method to check if API is working
 export async function GET() {
   return NextResponse.json({ 
     message: 'Users registration API is working',

@@ -1,28 +1,21 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-export default function SignupForm() {
+export default function SignupPage() {
+  const [selectedRole, setSelectedRole] = useState<'customer' | 'provider' | null>(null)
   const [formData, setFormData] = useState({
-    name: '',
+    full_name: '',
     email: '',
     phone: '',
     password: '',
-    userType: 'customer'
+    role: 'customer'
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   
   const router = useRouter()
-  const searchParams = useSearchParams()
-  
-  useEffect(() => {
-    const userType = searchParams.get('userType') as 'customer' | 'provider'
-    if (userType && ['customer', 'provider'].includes(userType)) {
-      setFormData(prev => ({ ...prev, userType }))
-    }
-  }, [searchParams])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -61,22 +54,125 @@ export default function SignupForm() {
     }
   }
 
+  const handleRoleChange = (newRole: 'customer' | 'provider') => {
+    setFormData(prev => ({ ...prev, role: newRole }))
+  }
+
+  // Role Selection Screen
+  if (!selectedRole) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 flex items-center justify-center p-8">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Join Beauty Marketplace
+            </h1>
+            <p className="text-gray-600">
+              Choose how you'd like to experience beauty
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Customer Card */}
+            <div
+              onClick={() => setSelectedRole('customer')}
+              className="border-2 border-gray-200 rounded-xl p-6 cursor-pointer hover:border-purple-300 hover:bg-purple-50 transition-all duration-200 group"
+            >
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                  <span className="text-2xl">💅</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900">Customer</h3>
+                  <p className="text-gray-600 text-sm mt-1">
+                    Book beauty services and discover amazing professionals
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Provider Card */}
+            <div
+              onClick={() => setSelectedRole('provider')}
+              className="border-2 border-gray-200 rounded-xl p-6 cursor-pointer hover:border-pink-300 hover:bg-pink-50 transition-all duration-200 group"
+            >
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center group-hover:bg-pink-200 transition-colors">
+                  <span className="text-2xl">💼</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900">Service Provider</h3>
+                  <p className="text-gray-600 text-sm mt-1">
+                    Grow your beauty business and connect with clients
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-gray-500 text-sm">
+              Already have an account?{' '}
+              <Link href="/login" className="text-purple-600 hover:text-purple-700 font-medium">
+                Sign in
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Registration Form Screen
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 flex items-center justify-center p-8">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-6">
+          <button
+            onClick={() => setSelectedRole(null)}
+            className="inline-flex items-center text-sm text-purple-600 hover:text-purple-700 mb-4"
+          >
+            ← Back to role selection
+          </button>
+          
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Create Account
           </h1>
           <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium">
-            {formData.userType === 'provider' ? '💼 Service Provider' : '👤 Customer'}
+            {formData.role === 'provider' ? '💼 Service Provider' : '💅 Customer'}
           </div>
           <p className="text-gray-600 mt-2">
-            {formData.userType === 'provider' 
+            {formData.role === 'provider' 
               ? 'Start your beauty business journey' 
               : 'Join our beauty community'
             }
           </p>
+        </div>
+
+        {/* Role Toggle */}
+        <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
+          <button
+            type="button"
+            onClick={() => handleRoleChange('customer')}
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+              formData.role === 'customer'
+                ? 'bg-white text-purple-700 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            💅 Customer
+          </button>
+          <button
+            type="button"
+            onClick={() => handleRoleChange('provider')}
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+              formData.role === 'provider'
+                ? 'bg-white text-pink-700 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            💼 Provider
+          </button>
         </div>
 
         {error && (
@@ -87,15 +183,15 @@ export default function SignupForm() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
               Full Name *
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
+              id="full_name"
+              name="full_name"
               required
-              value={formData.name}
+              value={formData.full_name}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="Enter your full name"
@@ -161,33 +257,11 @@ export default function SignupForm() {
 
         <div className="mt-6 text-center">
           <p className="text-gray-500 text-sm">
-            By creating an account, you agree to our{' '}
-            <a href="#" className="text-purple-600 hover:text-purple-700">
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href="#" className="text-purple-600 hover:text-purple-700">
-              Privacy Policy
-            </a>
+            Already have an account?{' '}
+            <Link href="/login" className="text-purple-600 hover:text-purple-700 font-medium">
+              Sign in
+            </Link>
           </p>
-          
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <p className="text-gray-500 text-sm">
-              Already have an account?{' '}
-              <Link href="/login" className="text-purple-600 hover:text-purple-700 font-medium">
-                Sign in
-              </Link>
-            </p>
-          </div>
-
-          <div className="mt-3">
-            <button
-              onClick={() => router.push('/signup')}
-              className="text-purple-600 hover:text-purple-700 text-sm font-medium"
-            >
-              ← Choose different account type
-            </button>
-          </div>
         </div>
       </div>
     </div>
