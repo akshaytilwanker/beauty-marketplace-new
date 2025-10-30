@@ -8,3 +8,4 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+// Force cache invalidation - build date: 2024-10-30
