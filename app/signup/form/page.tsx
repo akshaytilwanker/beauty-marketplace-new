@@ -5,11 +5,11 @@ import Link from 'next/link'
 
 export default function SignupForm() {
   const [formData, setFormData] = useState({
+    name: '', // Changed from full_name to name
     email: '',
-    password: '',
-    full_name: '',
     phone: '',
-    role: 'customer'
+    password: '',
+    userType: 'customer' // Changed from role to userType
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -17,11 +17,11 @@ export default function SignupForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
-  // Get role from URL parameter
+  // Get userType from URL parameter
   useEffect(() => {
-    const role = searchParams.get('role') as 'customer' | 'provider'
-    if (role && ['customer', 'provider'].includes(role)) {
-      setFormData(prev => ({ ...prev, role }))
+    const userType = searchParams.get('userType') as 'customer' | 'provider'
+    if (userType && ['customer', 'provider'].includes(userType)) {
+      setFormData(prev => ({ ...prev, userType }))
     }
   }, [searchParams])
 
@@ -38,12 +38,12 @@ export default function SignupForm() {
     setError('')
 
     try {
-     const response = await fetch('/api/users/register', {
+      const response = await fetch('/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // Now matches API exactly
       })
 
       const data = await response.json()
@@ -52,13 +52,9 @@ export default function SignupForm() {
         throw new Error(data.error || 'Registration failed')
       }
 
-      // Registration successful - redirect based on role
-      if (data.redirectTo) {
-        // For now, just show success message since we haven't built dashboard pages
-        alert(`Registration successful! You would be redirected to: ${data.redirectTo}`)
-        // In future: router.push(data.redirectTo)
-        router.push('/') // Redirect to home for now
-      }
+      // Registration successful
+      alert('Registration successful! Please check your email for verification.')
+      router.push('/') // Redirect to home
 
     } catch (err: any) {
       setError(err.message || 'Something went wrong')
@@ -75,10 +71,10 @@ export default function SignupForm() {
             Create Account
           </h1>
           <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium">
-            {formData.role === 'provider' ? '💼 Service Provider' : '👤 Customer'}
+            {formData.userType === 'provider' ? '💼 Service Provider' : '👤 Customer'}
           </div>
           <p className="text-gray-600 mt-2">
-            {formData.role === 'provider' 
+            {formData.userType === 'provider' 
               ? 'Start your beauty business journey' 
               : 'Join our beauty community'
             }
@@ -93,15 +89,15 @@ export default function SignupForm() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
               Full Name *
             </label>
             <input
               type="text"
-              id="full_name"
-              name="full_name"
+              id="name"
+              name="name" // Changed from full_name to name
               required
-              value={formData.full_name}
+              value={formData.name}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="Enter your full name"

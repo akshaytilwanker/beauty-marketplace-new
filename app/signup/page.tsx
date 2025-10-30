@@ -21,7 +21,7 @@ export default function Signup() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Customer Card */}
           <div
-            onClick={() => router.push('/signup/form?role=customer')}
+            onClick={() => router.push('/signup/form?userType=customer')}
             className="bg-white rounded-2xl p-8 cursor-pointer hover:shadow-2xl transition-all border-2 border-transparent hover:border-rose-200"
           >
             <div className="text-6xl mb-6 text-center">💁‍♀️</div>
@@ -49,7 +49,7 @@ export default function Signup() {
 
           {/* Provider Card - EMPHASIZED */}
           <div
-            onClick={() => router.push('/signup/form?role=provider')}
+            onClick={() => router.push('/signup/form?userType=provider')}
             className="bg-gradient-to-br from-purple-500 to-rose-500 rounded-2xl p-8 cursor-pointer hover:shadow-2xl transition-all border-2 border-transparent hover:border-purple-300 relative"
           >
             {/* Popular Badge */}
