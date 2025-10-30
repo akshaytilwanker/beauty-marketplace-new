@@ -1,10 +1,15 @@
 steps:
-  # Build the container image
+  # Build the container image with build args
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/beauty-marketplace', '.']
-    env:
+    args: 
+      - 'build'
+      - '--build-arg'
       - 'NEXT_PUBLIC_SUPABASE_URL=https://ylplopmkbairimcwdbim.supabase.co'
+      - '--build-arg'
       - 'NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlscGxvcG1rYmFpcmltY3dkYmltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY5Nzc2MjcsImV4cCI6MjAyMjU1MzYyN30.Ho-HINIVmBju-vQjzoUKyA_cf2wllcu'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/beauty-marketplace'
+      - '.'
   
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
