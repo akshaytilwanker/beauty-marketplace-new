@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+     "prebuild": "echo 'Build starting at $(date)'",
     "start": "next start",
     "lint": "eslint"
   },
