@@ -34,6 +34,7 @@ export default function ReviewsPage() {
     pendingApproval: 0
   });
   
+  // ✅ Correct: Supabase client inside component
   const supabase = createClientComponentClient();
 
   useEffect(() => {
@@ -43,10 +44,7 @@ export default function ReviewsPage() {
   const fetchReviews = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+      if (!user) return;
 
       const { data, error } = await supabase
         .from('reviews')
@@ -61,7 +59,6 @@ export default function ReviewsPage() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      
       setReviews(data || []);
       calculateStats(data || []);
     } catch (error) {
@@ -93,7 +90,6 @@ export default function ReviewsPage() {
 
       if (error) throw error;
       
-      // Refresh data
       fetchReviews();
     } catch (error) {
       console.error('Error updating review:', error);
@@ -111,7 +107,6 @@ export default function ReviewsPage() {
 
       if (error) throw error;
       
-      // Refresh data
       fetchReviews();
     } catch (error) {
       console.error('Error deleting review:', error);
