@@ -5,11 +5,11 @@ import Link from 'next/link'
 
 export default function SignupForm() {
   const [formData, setFormData] = useState({
-    name: '', // Changed from full_name to name
+    name: '',
     email: '',
     phone: '',
     password: '',
-    userType: 'customer' // Changed from role to userType
+    userType: 'customer'
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -17,7 +17,6 @@ export default function SignupForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
-  // Get userType from URL parameter
   useEffect(() => {
     const userType = searchParams.get('userType') as 'customer' | 'provider'
     if (userType && ['customer', 'provider'].includes(userType)) {
@@ -43,7 +42,7 @@ export default function SignupForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData), // Now matches API exactly
+        body: JSON.stringify(formData),
       })
 
       const data = await response.json()
@@ -52,9 +51,8 @@ export default function SignupForm() {
         throw new Error(data.error || 'Registration failed')
       }
 
-      // Registration successful
       alert('Registration successful! Please check your email for verification.')
-      router.push('/') // Redirect to home
+      router.push('/')
 
     } catch (err: any) {
       setError(err.message || 'Something went wrong')
@@ -95,7 +93,7 @@ export default function SignupForm() {
             <input
               type="text"
               id="name"
-              name="name" // Changed from full_name to name
+              name="name"
               required
               value={formData.name}
               onChange={handleChange}
