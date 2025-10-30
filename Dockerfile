@@ -1,23 +1,15 @@
 FROM node:20-alpine
 
-# Accept build arguments
-ARG NEXT_PUBLIC_SUPABASE_URL
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-# Set as environment variables for the build
-ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
-
 WORKDIR /app
 
 # Copy package files first
 COPY package*.json ./
 RUN npm ci
 
-# Copy source code
+# Copy source code (including .env.production)
 COPY . .
 
-# Build the application (will now have env vars)
+# Build the application (Next.js will read from .env.production)
 RUN npm run build
 
 # Expose port
